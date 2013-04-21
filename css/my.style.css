@@ -1,0 +1,98 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/* Just to visualize all the elements (blocks) */
+/* 
+* 
+{
+	border: 1px solid gray;
+}
+
+*/
+
+body {
+    background-color: #e7e5e5;
+    padding: 20px 20px 20px 20px;
+    text-align: center;
+    width: 900px;
+    margin: 0 auto;
+
+}
+
+p {
+    font: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-size: 16px;
+    color: #0b0b0b;
+    line-height: 1.5em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.logo h1, .logo a {
+    text-align: right;
+    color: #3e3e3e;
+    text-decoration: none;
+    font: Georgia, "Times New Roman", Times, serif;
+    font-size: 36px;
+    font-variant: small-caps;
+}
+
+.logo p {
+    text-align: right;
+    color: #5f5f5f;
+}
+
+.nav {
+    background-color: #333;
+    line-height: 2em;
+}
+
+.nav li {
+    display: inline;
+    margin-right: 20px;
+
+}
+
+.nav li a {
+    color: #999999;
+    font-variant: small-caps;
+    font-size: 1.3em;
+}
+
+#main {
+    border: 3px solid;
+    height: 400px;
+    width: 700px;
+    margin: 0 auto;
+}
+
+#content {
+    background: #333;
+    margin: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
+}
+
+.main-content {
+    font-family: "Calibri";
+    font-size: 2em;
+    color: #0d3349;
+}
+
+#content p {
+    color: #999999;
+}
+
+.footer {
+    margin: 0 auto;
+}
+
+.footer p {
+    text-transform: uppercase;
+    border-bottom: solid 1px;
+}
+
+.footer li {
+    display: inline;
+}
