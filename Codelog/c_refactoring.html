@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ambidextrous' Codelog [built on Bootstrap from Twitter]</title>
+<meta name="description" content="Ravi S Sinha's codelog built on Bootstrap from Twitter and Google-code-prettify">
+<meta name="author" content="Ravi S Sinha">
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Le styles -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="GooglePrettify/prettify.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="GooglePrettify/prettify.js"></script>
+<style type="text/css">
+body {
+	padding-top: 60px;
+}
+</style>
+
+</head>
+
+<body onLoad="prettyPrint()">
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid"> <a class="brand pull-left" href="index.html">Ambidextrous' Codelog</a>
+      <ul class="nav pull-right">
+        <li class="active"><a href="../index.html">Back to main site</a></li>
+        </ul>
+    </div>
+  </div>
+</div>
+
+    <div class="container-fluid">
+      <div class="content">
+       
+        <div class="row">
+          <div class="span16">
+            <h2>Refactoring a simple C application</h2>
+            <p>Let us write a simple C program and refactor the living daylights out of it. </p>
+            <p>This post is not about timing considerations, but about the sheer aesthetics and maintainability of the code. Someone said, when you code, make it correct, beautiful, and fast, in that order. This post is going to try to do the former two out of these - correct and beautiful. We'll add unit tests to maintain the integrity of the program and make testing easier at the same time, that at each successive iteration of making it more beautiful we did not accidentally break something.              </p>
+            <p> It is the first time I've actually sat down and refactored some code I wrote, so I might not have done the absolute best possible job at it, but it is a beginning at any rate. The changes at every successive iteration are marked.</p>
+            <p><span class="btn btn-info">Problem</span> Convert numbers (upto 3 digits long) into words              </p>
+            <p><span class="btn btn-success">Iteration 1</span> 
+            <table class="table table-striped">
+            <tr>
+            <td>lines</td><td>functions</td><td>symbols</td><td>includes</td><td>consts</td><td>name</td><td>tests</td>
+            </tr>
+            <tr>
+            <td>172</td><td>3</td><td>4</td><td>4</td><td>4</td><td>n2w.c</td><td><code>runtests()</code>, all passed</td>
+            </tr>
+            
+            </table>             </p>
+            <pre class="prettyprint">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+
+/* Program to convert a number less than 1000
+ * into words, e.g.
+ * 941 == Nine hundred and forty one
+ */
+
+#define MAXNUM 1000		/* Greatest number allowed */
+#define NUMDIGITS 3		/* Number of digits */ 
+#define MAXWORDS 100		/* Max number of word */
+#define MAXSTR 20		/* Max length of a word representation */
+
+int splitNumbers(int num, int digits[]);
+void getWords(int num, int digits[], char words[]);
+void runtests(void);
+
+const char hundreds[][MAXSTR] = {"", "One", "Two", "Three", "Four",
+						"Five", "Six", "Seven", "Eight",
+						"Nine"};
+const char tens[][MAXSTR] = {"", "Ten", "Twenty", "Thirty", "Forty", 
+						"Fifty", "Sixty", "Seventy", "Eighty",
+						"Ninety"};
+const char specials[][MAXSTR] = {"", "Eleven", "Twelve", "Thirteen", 
+						"Fourteen", "Fifteen", "Sixteen", 
+						"Seventeen", "Eighteen", "Nineteen"};
+const char ones[][MAXSTR] = {"", "One", "Two", "Three", "Four", 
+						"Five", "Six", "Seven", "Eight", 
+						"Nine"};
+
+int main(void) {
+
+	int n = 0;
+	int nd[NUMDIGITS];
+	int i, j;
+	char words[MAXWORDS];
+	int choice = 0;
+
+	printf("Enter 0 for entering numbers and 1 for running automated tests: ");
+	scanf(" %d", &choice);
+
+	if(!choice)
+
+	while(true) {
+
+		printf("Enter 0 to quit.\n");
+		printf("Enter a positive 3-digit number or less: ");
+		scanf(" %d", &n);
+
+		if(n < 0 || n > 999) {
+			printf("No.\n");
+			continue;
+		}
+
+		if(n == 0)
+			return 0;
+	
+		j = splitNumbers(n, nd);
+
+		for(i = j - 1; i >= 0; --i)
+			printf("%-5d\n", nd[i]);	
+
+		getWords(j, nd, words);
+
+	}
+	else 
+		runtests();
+
+	return 0;
+}
+
+void runtests() {
+	bool success = true;
+	int digits[NUMDIGITS];
+	char words[MAXWORDS];
+	int numbers[] = {1, 100, 999, 832, 801, 710, 11, 19, 900, 920};
+	char answers[][100] = {"One", "One hundred", "Nine hundred and Ninety Nine", 
+			"Eight hundred and Thirty Two", "Eight hundred and One",
+			"Seven hundred and Ten", "Eleven", "Nineteen",
+			"Nine hundred", "Nine hundred and Twenty"};
+	int i, j;
+
+	for(i = 0; i < 10; ++i) {
+		j = splitNumbers(numbers[i], digits);
+		getWords(j, digits, words);
+		if(strcmp(words, answers[i]))
+			success = false;
+	}
+
+	if(success)
+		printf("All tests passed.\n");
+	else
+		printf("Some tests failed.\n");
+	
+
+}
+
+int splitNumbers(int num, int digits[]) {
+	int i = 0;
+	int currDig = 0;
+	while(num > 0) {
+		currDig = num % 10;
+		digits[i++] = currDig;	
+		num /= 10;
+	}
+
+	return i;
+
+}
+
+void getWords(int num, int digits[], char words[]) {
+	int i = 0;
+	switch(num) {
+		case 1:
+			strcpy(words, ones[digits[0]]);
+			printf("%s\n", words);
+			break;
+
+		case 2:
+			if(digits[0] == 0) {
+				strcpy(words, tens[digits[1]]);
+				printf("%s\n", words);
+				break;
+			}
+
+			if(digits[1] == 1 && digits[0] != 0) {
+				strcpy(words, specials[digits[0]]);
+				printf("%s\n", words);
+			} else {
+
+				strcpy(words, tens[digits[1]]);
+				strcat(words, " ");
+				strcat(words, ones[digits[0]]);
+				printf("%s\n", words);
+
+			}
+			break;
+
+		case 3:
+			strcpy(words, hundreds[digits[2]]);
+			strcat(words, " ");
+			strcat(words, "hundred"); 
+			if (digits[0] != 0 || digits[1] != 0) {
+				strcat(words, " and ");
+	 			if(digits[0] == 0) {
+					strcat(words, tens[digits[1]]);
+					printf("%s\n", words);
+					break;
+				}
+
+				if(digits[1] == 1) {
+					strcat(words, specials[digits[0]]);
+				} else {
+
+					if(digits[1] != 0) {
+				 		strcat(words, tens[digits[1]]);
+				 		strcat(words, " ");
+					}
+					strcat(words, ones[digits[0]]);
+				}
+			}
+			printf("%s\n", words);
+			break;
+
+		default:
+			printf("Not ready yet.\n");
+			break; 
+	}
+	
+}
+
+            </pre>
+            <p>The first attempt at the problem. Works well, and passes all tests. But it is long and it could be improved upon in several ways. What can we improve? Looking at the code one thing that strikes out is the display. There are several <code>printf()</code>s spread out throughout the <code>getWords()</code> function. Let us see what we can do about that.              </p>
+            <p><span class="btn btn-success">Iteration 2</span> 
+            <table class="table table-striped">
+            <tr>
+            <td>lines</td><td>functions</td><td>symbols</td><td>includes</td><td>consts</td><td>name</td><td>tests</td>
+            </tr>
+            <tr>
+            <td>173</td><td>4</td><td>4</td><td>4</td><td>4</td><td>n2w_2.c</td><td><code>runtests()</code>, all passed</td>
+            </tr>
+            
+            </table> 
+            
+                     
+            </p>
+            <pre class="prettyprint">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+
+/* Program to convert a number less than 1000
+ * into words, e.g.
+ * 941 == Nine hundred and forty one
+ * Iteration 2
+ */
+
+#define MAXNUM 1000		/* Greatest number allowed */
+#define NUMDIGITS 3		/* Number of digits */ 
+#define MAXWORDS 100		/* Max number of word */
+#define MAXSTR 20		/* Max length of a word representation */
+
+int splitNumbers(int num, int digits[]);
+void getWords(int num, int digits[], char words[]);
+void runtests(void);
+<code>void display(char words[]);</code>
+
+const char hundreds[][MAXSTR] = {"", "One", "Two", "Three", "Four",
+						"Five", "Six", "Seven", "Eight",
+						"Nine"};
+const char tens[][MAXSTR] = {"", "Ten", "Twenty", "Thirty", "Forty", 
+						"Fifty", "Sixty", "Seventy", "Eighty",
+						"Ninety"};
+const char specials[][MAXSTR] = {"", "Eleven", "Twelve", "Thirteen", 
+						"Fourteen", "Fifteen", "Sixteen", 
+						"Seventeen", "Eighteen", "Nineteen"};
+const char ones[][MAXSTR] = {"", "One", "Two", "Three", "Four", 
+						"Five", "Six", "Seven", "Eight", 
+						"Nine"};
+
+int main(void) {
+
+	int n = 0;
+	int nd[NUMDIGITS];
+	int i, j;
+	char words[MAXWORDS];
+	int choice = 0;
+
+	printf("Enter 0 for entering numbers and 1 for running automated tests: ");
+	scanf(" %d", &choice);
+
+	if(!choice)
+
+	while(true) {
+
+		printf("Enter 0 to quit.\n");
+		printf("Enter a positive 3-digit number or less: ");
+		scanf(" %d", &n);
+
+		if(n < 0 || n > 999) {
+			printf("No.\n");
+			continue;
+		}
+
+		if(n == 0)
+			return 0;
+	
+		j = splitNumbers(n, nd);
+
+		for(i = j - 1; i >= 0; --i)
+			printf("%-5d\n", nd[i]);	
+
+		getWords(j, nd, words);
+
+	}
+	else 
+		runtests();
+
+	return 0;
+}
+
+void display(char words[]) {
+	printf("%s\n", words);
+}
+
+void runtests() {
+	bool success = true;
+	int digits[NUMDIGITS];
+	char words[MAXWORDS];
+	int numbers[] = {1, 100, 999, 832, 801, 710, 11, 19, 900, 920};
+	char answers[][100] = {"One", "One hundred", "Nine hundred and Ninety Nine", 
+			"Eight hundred and Thirty Two", "Eight hundred and One",
+			"Seven hundred and Ten", "Eleven", "Nineteen",
+			"Nine hundred", "Nine hundred and Twenty"};
+	int i, j;
+
+	for(i = 0; i < 10; ++i) {
+		j = splitNumbers(numbers[i], digits);
+		getWords(j, digits, words);
+		if(strcmp(words, answers[i]))
+			success = false;
+	}
+
+	if(success)
+		printf("All tests passed.\n");
+	else
+		printf("Some tests failed.\n");
+	
+
+}
+
+int splitNumbers(int num, int digits[]) {
+	int i = 0;
+	int currDig = 0;
+	while(num > 0) {
+		currDig = num % 10;
+		digits[i++] = currDig;	
+		num /= 10;
+	}
+
+	return i;
+
+}
+
+void getWords(int num, int digits[], char words[]) {
+	int i = 0;
+	switch(num) {
+		case 1:
+			strcpy(words, ones[digits[0]]);
+			break;
+
+		case 2:
+			if(digits[0] == 0) {
+				strcpy(words, tens[digits[1]]);
+				break;
+			}
+
+			if(digits[1] == 1 && digits[0] != 0) {
+				strcpy(words, specials[digits[0]]);
+			} else {
+
+				strcpy(words, tens[digits[1]]);
+				strcat(words, " ");
+				strcat(words, ones[digits[0]]);
+
+			}
+			break;
+
+		case 3:
+			strcpy(words, hundreds[digits[2]]);
+			strcat(words, " ");
+			strcat(words, "hundred"); 
+			if (digits[0] != 0 || digits[1] != 0) {
+				strcat(words, " and ");
+	 			if(digits[0] == 0) {
+					strcat(words, tens[digits[1]]);
+					break;
+				}
+
+				if(digits[1] == 1) {
+					strcat(words, specials[digits[0]]);
+				} else {
+
+					if(digits[1] != 0) {
+				 		strcat(words, tens[digits[1]]);
+				 		strcat(words, " ");
+					}
+					strcat(words, ones[digits[0]]);
+				}
+			}
+			break;
+
+		default:
+			printf("Not ready yet.\n");
+			break; 
+	}
+	display(words);
+	
+}
+
+            </pre>
+            <p>What did we achieve from this iteration, if the number of lines increased? Well, the number of lines is hardly ever an issue, if the readability of the code improves. What would you rather have? 10 <code>printf()</code>s or just one display function called from one place when the call returns? We could just as well have put one <code>printf()</code> here rather than making a function out of it, but a function seems like a good idea here because if we want we can modify how we display the strings, make the display complicated and it can be abstracted from the caller.              </p>
+            <p>Ok, so far, so good. What else? Is there anything that we can make better? Let's read through this second iteration. What do you see? Is there a difference between the <code>const char hundreds</code> and <code>ones</code>? Then why do we have this repetition? Does it help clarify the logic in the code, especially in the function <code>getWords()</code>? No. It is only used once and we might very well combine <code>ones</code> and <code>hundreds</code> into something more generic, say, <code>wordsForNumbers</code>. </p>
+            <p>Okay, done. What next? The function <code>getWords()</code> seems to be awfully long. Is there any repeated code in there? Can we make it more succinct? Now it becomes tougher. Can we find some duplicated code and refactor it into a function?  </p>
+              
+              <p>Perhaps there is an overlap between the three cases. When the number of digits is 3, for example, we do something with the hundreds position and then do something for the remaining two positions, which is not too different from what we do if we only have 2 digits in the first place. This jumps out as a potential refactoring candidate. But the fact that we are using both <code>strcat()</code> and <code>strcpy()</code> can make things a bit more complicated as far as the refactoring is concerned... </p>
+              
+              <p>You with me still? Bear with me for a moment. </p>
+              
+              <p>If we remove all <code>strcpy()</code>s and only use <code>strcat()</code>s, we can refactor this thing more easily. </p>
+            <p>When you look at the next iteration, you'll see what I mean. </p>
+            <p><span class="btn btn-success">Iteration 3</span> 
+            <table class="table table-striped">
+            <tr>
+            <td>lines</td><td>functions</td><td>symbols</td><td>includes</td><td>consts</td><td>name</td><td>tests</td>
+            </tr>
+            <tr>
+            <td>172</td><td>4</td><td>4</td><td>4</td><td>3</td><td>n2w_3.c</td><td><code>runtests()</code>, all passed</td>
+            </tr>
+            
+            </table> 
+            
+                  </p>
+            <pre class="prettyprint">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+
+/* Program to convert a number less than 1000
+ * into words, e.g.
+ * 941 == Nine hundred and forty one
+ * Iteration 2
+ */
+
+#define MAXNUM 1000		/* Greatest number allowed */
+#define NUMDIGITS 3		/* Number of digits */ 
+#define MAXWORDS 100		/* Max number of word */
+#define MAXSTR 20		/* Max length of a word representation */
+
+int splitNumbers(int num, int digits[]);
+void getWords(int num, int digits[], char words[]);
+void runtests(void);
+void display(char words[]);
+
+const char tens[][MAXSTR] = {"", "Ten", "Twenty", "Thirty", "Forty", 
+						"Fifty", "Sixty", "Seventy", "Eighty",
+						"Ninety"};
+const char specials[][MAXSTR] = {"", "Eleven", "Twelve", "Thirteen", 
+						"Fourteen", "Fifteen", "Sixteen", 
+						"Seventeen", "Eighteen", "Nineteen"};
+<code>const char wordsForNumbers[][MAXSTR] = {"", "One", "Two", "Three", "Four", 
+						"Five", "Six", "Seven", "Eight", 
+						"Nine"};</code>
+
+int main(void) {
+
+	int n = 0;
+	int nd[NUMDIGITS];
+	int i, j;
+	char words[MAXWORDS];
+	int choice = 0;
+
+	printf("Enter 0 for entering numbers and 1 for running automated tests: ");
+	scanf(" %d", &choice);
+
+	if(!choice)
+
+	while(true) {
+
+		printf("Enter 0 to quit.\n");
+		printf("Enter a positive 3-digit number or less: ");
+		scanf(" %d", &n);
+
+		if(n < 0 || n > 999) {
+			printf("No.\n");
+			continue;
+		}
+
+		if(n == 0)
+			return 0;
+	
+		j = splitNumbers(n, nd);
+
+		for(i = j - 1; i >= 0; --i)
+			printf("%-5d\n", nd[i]);	
+
+		getWords(j, nd, words);
+
+	}
+	else 
+		runtests();
+
+	return 0;
+}
+
+void display(char words[]) {
+	printf("%s\n", words);
+}
+
+void runtests() {
+	bool success = true;
+	int digits[NUMDIGITS];
+	char words[MAXWORDS];
+	int numbers[] = {1, 100, 999, 832, 801, 710, 11, 19, 900, 920};
+	char answers[][100] = {"One", "One hundred", "Nine hundred and Ninety Nine", 
+			"Eight hundred and Thirty Two", "Eight hundred and One",
+			"Seven hundred and Ten", "Eleven", "Nineteen",
+			"Nine hundred", "Nine hundred and Twenty"};
+	int i, j;
+
+	for(i = 0; i < 10; ++i) {
+		j = splitNumbers(numbers[i], digits);
+		getWords(j, digits, words);
+		if(strcmp(words, answers[i]))
+			success = false;
+	}
+
+	if(success)
+		printf("All tests passed.\n");
+	else
+		printf("Some tests failed.\n");
+	
+
+}
+
+int splitNumbers(int num, int digits[]) {
+	int i = 0;
+	int currDig = 0;
+	while(num > 0) {
+		currDig = num % 10;
+		digits[i++] = currDig;	
+		num /= 10;
+	}
+
+	return i;
+
+}
+
+void getWords(int num, int digits[], char words[]) {
+	int i = 0;
+	<code>if(words != NULL)
+		strcpy(words, "");</code>
+	switch(num) {
+		case 1:
+			<code>strcat(words, wordsForNumbers[digits[0]]);</code>
+			break;
+
+		case 2:
+			if(digits[0] == 0) {
+				<code>strcat(words, tens[digits[1]]);</code>
+				break;
+			}
+
+			if(digits[1] == 1 && digits[0] != 0) {
+				<code>strcat(words, specials[digits[0]]);</code>
+			} else {
+
+				<code>strcat(words, tens[digits[1]]);</code>
+				strcat(words, " ");
+				strcat(words, wordsForNumbers[digits[0]]);
+
+			}
+			break;
+
+		case 3:
+			<code>strcat(words, wordsForNumbers[digits[2]]);</code>
+			strcat(words, " ");
+			strcat(words, "hundred"); 
+			if (digits[0] != 0 || digits[1] != 0) {
+				strcat(words, " and ");
+	 			if(digits[0] == 0) {
+					strcat(words, tens[digits[1]]);
+					break;
+				}
+
+				if(digits[1] == 1) {
+					strcat(words, specials[digits[0]]);
+				} else {
+
+					if(digits[1] != 0) {
+				 		strcat(words, tens[digits[1]]);
+				 		strcat(words, " ");
+					}
+					strcat(words, wordsForNumbers[digits[0]]);
+				}
+			}
+			break;
+
+		default:
+			printf("Not ready yet.\n");
+			break; 
+	}
+	display(words);
+	
+}
+
+            </pre>
+            <p>Take a look at the function <code>getWords()</code> now. At the beginning, we set the string <code>words</code> to equal an empty string, and then use <code>strcat()</code> consistently in all the cases of the <code>switch()</code>. What does this do? Look for example in the case 2, what it does when the first digit is 0. Then look at case 3, what it does after adding the word 'and'. See what I mean? It is more or less the same thing as the case 2! Now we go for refactoring these duplicated sections into a separate function.
+</p>
+            <p><span class="btn btn-success">Iteration 4</span> 
+            <table class="table table-striped">
+            <tr>
+            <td>lines</td><td>functions</td><td>symbols</td><td>includes</td><td>consts</td><td>name</td><td>tests</td>
+            </tr>
+            <tr>
+            <td>166</td><td>5</td><td>4</td><td>4</td><td>3</td><td>n2w_4.c</td><td><code>runtests()</code>, all passed</td>
+            </tr>
+            
+            </table> 
+            
+                        </p>
+            <pre class="prettyprint">
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+
+/* Program to convert a number less than 1000
+ * into words, e.g.
+ * 941 == Nine hundred and forty one
+ * Iteration 2
+ */
+
+#define MAXNUM 1000		/* Greatest number allowed */
+#define NUMDIGITS 3		/* Number of digits */ 
+#define MAXWORDS 100		/* Max number of word */
+#define MAXSTR 20		/* Max length of a word representation */
+
+int splitNumbers(int num, int digits[]);
+void getWords(int num, int digits[], char words[]);
+void runtests(void);
+void display(char words[]);
+<code>void processTwoDigits(int digits[], char words[]);</code>
+
+const char tens[][MAXSTR] = {"", "Ten", "Twenty", "Thirty", "Forty", 
+						"Fifty", "Sixty", "Seventy", "Eighty",
+						"Ninety"};
+const char specials[][MAXSTR] = {"", "Eleven", "Twelve", "Thirteen", 
+						"Fourteen", "Fifteen", "Sixteen", 
+						"Seventeen", "Eighteen", "Nineteen"};
+const char wordsForNumbers[][MAXSTR] = {"", "One", "Two", "Three", "Four", 
+						"Five", "Six", "Seven", "Eight", 
+						"Nine"};
+
+int main(void) {
+
+	int n = 0;
+	int nd[NUMDIGITS];
+	int i, j;
+	char words[MAXWORDS];
+	int choice = 0;
+
+	printf("Enter 0 for entering numbers and 1 for running automated tests: ");
+	scanf(" %d", &choice);
+
+	if(!choice)
+
+	while(true) {
+
+		printf("Enter 0 to quit.\n");
+		printf("Enter a positive 3-digit number or less: ");
+		scanf(" %d", &n);
+
+		if(n < 0 || n > 999) {
+			printf("No.\n");
+			continue;
+		}
+
+		if(n == 0)
+			return 0;
+	
+		j = splitNumbers(n, nd);
+
+		for(i = j - 1; i >= 0; --i)
+			printf("%-5d\n", nd[i]);	
+
+		getWords(j, nd, words);
+
+	}
+	else 
+		runtests();
+
+	return 0;
+}
+
+void display(char words[]) {
+	printf("%s\n", words);
+}
+
+void runtests() {
+	bool success = true;
+	int digits[NUMDIGITS];
+	char words[MAXWORDS];
+	int numbers[] = {1, 100, 999, 832, 801, 710, 11, 19, 900, 920};
+	char answers[][100] = {"One", "One hundred", "Nine hundred and Ninety Nine", 
+			"Eight hundred and Thirty Two", "Eight hundred and One",
+			"Seven hundred and Ten", "Eleven", "Nineteen",
+			"Nine hundred", "Nine hundred and Twenty"};
+	int i, j;
+
+	for(i = 0; i < 10; ++i) {
+		j = splitNumbers(numbers[i], digits);
+		getWords(j, digits, words);
+		if(strcmp(words, answers[i]))
+			success = false;
+	}
+
+	if(success)
+		printf("All tests passed.\n");
+	else
+		printf("Some tests failed.\n");
+	
+
+}
+
+int splitNumbers(int num, int digits[]) {
+	int i = 0;
+	int currDig = 0;
+	while(num > 0) {
+		currDig = num % 10;
+		digits[i++] = currDig;	
+		num /= 10;
+	}
+
+	return i;
+
+}
+<code>
+void processTwoDigits(int digits[], char words[]) {
+	if(digits[0] == 0) {
+		strcat(words, tens[digits[1]]);
+	} else
+
+	if(digits[1] == 1 && digits[0] != 0) {
+		strcat(words, specials[digits[0]]);
+	} else {
+
+		if(digits[1] != 0) {
+			strcat(words, tens[digits[1]]);
+			strcat(words, " ");
+		}
+		strcat(words, wordsForNumbers[digits[0]]);
+
+	}
+	
+}
+</code>
+void getWords(int num, int digits[], char words[]) {
+	int i = 0;
+	if(words != NULL)
+		strcpy(words, "");	
+	switch(num) {
+		case 1:
+			strcat(words, wordsForNumbers[digits[0]]);
+			break;
+
+		case 2:
+			<code>processTwoDigits(digits, words);</code>
+			break;
+
+		case 3:
+			strcat(words, wordsForNumbers[digits[2]]);
+			strcat(words, " ");
+			strcat(words, "hundred"); 
+			if (digits[0] != 0 || digits[1] != 0) {
+				strcat(words, " and ");
+
+				<code>processTwoDigits(digits, words);</code>
+			}
+			break;
+
+		default:
+			printf("Not ready yet.\n");
+			break; 
+	}
+	display(words);
+	
+}
+
+            </pre>
+            <p>See how abstracting the process of handling two digits into a new function <code>processTwoDigits()</code> has made the whole thing look and feel better? How in particular the <code>getWords()</code> function has been reduced to a small, manageable size?</p>
+              
+              <p>Can we do better than this? Probably. Does this kind of refactoring help in extending the program further? You bet. If we were to ever extend this to handle up to 4 digits, the case 4 in the <code>switch()</code> will repeat some functionality from the first 3 digits, so we could probably abstract that as a function as well.              </p>
+            <p>With that thought, I'll leave you to ponder. Happy refactoring! </p>
+          </div>
+       
+        </div>
+        <footer>
+          <p>&copy; Ravi Sinha 2012</p>
+        </footer>
+      </div>
+    </div>
+
+  </body>
+</html>

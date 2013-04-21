@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ambidextrous' Codelog [built on Bootstrap from Twitter]</title>
+<meta name="description" content="Ravi S Sinha's codelog built on Bootstrap from Twitter and Google-code-prettify">
+<meta name="author" content="Ravi S Sinha">
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Le styles -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="GooglePrettify/prettify.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="GooglePrettify/prettify.js"></script>
+<style type="text/css">
+body {
+	padding-top: 60px;
+}
+</style>
+
+</head>
+
+<body onLoad="prettyPrint()">
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid"> <a class="brand pull-left" href="index.html">Ambidextrous' Codelog</a>
+      <ul class="nav pull-right">
+        <li class="active"><a href="../index.html">Back to main site</a></li>
+        </ul>
+    </div>
+  </div>
+</div>
+
+    <div class="container-fluid">
+      <div class="content">
+        <div class="row">
+          <div class="span16">
+            <h2>On brevity and robustness: C vs Python</h2>
+            <p>Let us write a simple C program to let the user enter a bunch of choices and randomly pick one. </p>
+            
+            <p><span class="btn btn-info">Problem</span> Pick randomly from a few choices              </p>
+            <p><span class="btn btn-success">Iteration 1: C</span> 
+            
+            <pre class="prettyprint">
+/* Let the user enter a bunch-a choices
+ * and pick one out of them randomly 
+ *
+ * Ambidextrous, Feb 6, 2012
+ * Ambidextrous City
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define BUFSIZE 512
+#define NUMSIZE 3
+
+void getChoices(char **choices) {
+    int count = 0, total = 0, i = 0, index = 0;
+    char choiceBuffer[BUFSIZE];
+    char totalChar[NUMSIZE];
+
+    printf("How many choices do you have? ");
+    /* using scanf will mess up the fgets used below */
+    fgets(totalChar, BUFSIZE, stdin);
+    total = atoi(totalChar);
+
+    /* dymanically allocate required number of char pointers */
+    choices = (char **) malloc (sizeof(char*) * total);
+
+    printf("Enter %d choices below.\n", total);
+    
+    for(count = 0; count < total; ++count) {
+        printf("%d: ", count);
+        fgets(choiceBuffer, BUFSIZE, stdin);
+        /* get rid of the newline appended by fgets */
+        choiceBuffer[strlen(choiceBuffer) - 1] = '\0';
+        choices[count] = (char *) malloc(sizeof(char) * strlen(choiceBuffer));
+        strcpy(choices[count], choiceBuffer);
+    }
+
+    printf("Your randomized choice is:\n");
+
+    /* average of 100 random outcomes */
+    for(; i < 100; ++i) 
+        index += rand() % total;
+
+    index /= 100;
+
+    printf("%s\n", choices[index]);
+}
+
+int main(void) {
+
+    char **choices; /* will allocate memory dynamically */
+
+    getChoices(choices);
+
+    return 0;
+}
+
+
+
+            </pre>
+            <p>What's the issue here? None, really, if you think about it. The code is robust and works perfectly, doing what the user expects it to do. Except it's long. It needs dynamic memory allocation and pointers, and is therefore extremely prone to errors and gnarly pointer bugs. Let us examine a solution in Python. 
+            
+                          </p>
+            <p><span class="btn btn-success">Iteration 2: Python</span> 
+           
+                     
+            </p>
+            <pre class="prettyprint">
+"""
+Let the user enter a bunch-a choices
+and pick one out of them randomly
+
+Ambidextrous, Feb 6, 2012
+Ambidextrous City
+"""
+
+from random import randint
+
+def getChoices(choices):
+    print 'How many choices? '
+    total = raw_input()
+
+    print 'Enter %s choices below\n' % (total)
+
+    for i in range(0, int(total)):
+        choices.append(raw_input())
+
+def randomize(choices):
+    print '\nYour random choice is %s\n' % choices[randint(0, len(choices) - 1)]
+
+if __name__ == "__main__":
+    choices = []
+    getChoices(choices)
+    randomize(choices)
+
+
+
+
+
+            </pre>
+            <p>And it is doing dynamic memory allocation behind the scenes!            </p>
+            <p>Ok, so Python doesn't really let _you_ control the memory management, but in my opinion for small tasks like this it is well worth it.
+            </p>
+              
+             
+          </div>
+       
+        </div>
+        <footer>
+          <p>&copy; Ravi Sinha 2012</p>
+        </footer>
+      </div>
+    </div>
+
+  </body>
+</html>

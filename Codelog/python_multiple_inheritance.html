@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ambidextrous' Codelog [built on Bootstrap from Twitter]</title>
+<meta name="description" content="Ravi S Sinha's codelog built on Bootstrap from Twitter and Google-code-prettify">
+<meta name="author" content="Ravi S Sinha">
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Le styles -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="GooglePrettify/prettify.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="GooglePrettify/prettify.js"></script>
+<style type="text/css">
+body {
+	padding-top: 60px;
+}
+</style>
+
+</head>
+
+<body onLoad="prettyPrint()">
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid"> <a class="brand pull-left" href="index.html">Ambidextrous' Codelog</a>
+      <ul class="nav pull-right">
+        <li class="active"><a href="../index.html">Back to main site</a></li>
+        </ul>
+    </div>
+  </div>
+</div>
+
+    <div class="container-fluid">
+      <div class="content">
+        <div class="row">
+          <div class="span16">
+            <h2>Lessons from Python multiple inheritance</h2>
+            
+            <p>
+            Python supports multiple inheritance, and while I was working through the <a href="https://bitbucket.org/gregmalcolm/python_koans/wiki/Home" target="_blank">Python Koans</a>, certain 
+            rules struck me as worthwhile of blogging. So here goes.
+            </p>
+          
+          	<p> Let us dive right into the code. </p>
+            <pre class="prettyprint">
+"""
+Lessons learned in Python's multiple inheritance
+Ambidextrous
+Apr 16, 2012
+
+Class hierarchy:
+
+     Car
+   /     \
+ BMW    Mercedes   Hybrid
+    \       /     /
+        MercBMW
+      
+"""
+
+class Car(object):
+    def __init__(self):
+        self._name = None
+        
+    def set_name(self, name):
+        self._name = name
+        
+    def make(self):
+        return 'Universe'
+        
+    def speak(self):
+        return 'In Car class'
+        
+class BMW(Car):
+    def __init__(self):
+        super(BMW, self).__init__()
+        
+    def make(self):
+        return 'BMW'
+        
+    def speak(self):
+        return 'In BMW class'
+        
+class Mercedes(Car):
+    def __init__(self):
+        super(Mercedes, self).__init__()
+        
+    def make(self):
+        return 'Mercedes'
+        
+    def speak(self):
+        return 'In Mercedes class'
+        
+class Hybrid(object):
+    def __init__(self):
+        pass
+        
+    def speak(self):
+        return 'In Hybrid class'
+        
+class MercBMW(BMW, Mercedes, Hybrid):
+    def __init__(self):
+        super(BMW, self).__init__()
+        super(Mercedes, self).__init__()
+        super(Hybrid, self).__init__()
+    
+    
+derived = MercBMW()
+
+# Priority: left-most superclass
+# <code>Calls speak() in BMW </code>
+print derived.speak()  
+
+# Method Resolution Order
+mro = type(MercBMW()).__mro__
+print 'Methods will be resolved in the order: '
+ordering = []
+for item in mro:
+    ordering.append(item.__name__)
+    
+print ' -> '.join(ordering)
+
+next = super(MercBMW, derived)
+print next.speak()
+
+next = super(BMW, derived)
+# <code> Follows the ordering in __mro__</code>
+print next.speak()
+
+# super() is like calling next_mro()
+
+# Priority: super-class > super-super-class
+# <code> make() in BMW is called, not the one in Car </code>
+print derived.make()
+print next.make()
+
+       
+     </pre>
+          
+          <p> The code starts off with a comment block that shows the hierarchy of classes, namely <code>Car, BMW, Mercedes, Hybrid, </code> and <code> MercBMW </code>. Some of the rules are:
+          
+          <ol>
+          
+          <li>The attribute <code>__mro__</code> represents the Method Resolution Order, i.e. the oder in which the methods in the various classes in the hierarchy will be executed. If you print the value of this attribute, you see the ordering is <code>MercBMW, BMW, Mercedes, Car, Hybrid, object</code>. </li>
+          <li>Calling <code>super()</code> follows the ordering in <code>__mro__</code>. So for instance, if you call super after <code>BMW</code>, Python will look for the next method in <code>Mercedes</code>, although the latter is hardly a superclass of the former in this setting. </li>
+          <li>As can be seen from some calls in the code above, in multiple inheritance (see class <code>MercBMW</code>), the left-most superclass has priority over the others, so the method that is present in the left-most superclass will be called. The comments show the output.</li>
+          <li>A method in the superclass has a higher priority than a method in a super-super class, as can also be seen from the code and comments.</li>
+          
+          </ol>
+          </div>
+       
+        </div>
+        <footer>
+          <p>&copy; Ravi Sinha 2012</p>
+        </footer>
+      </div>
+    </div>
+
+  </body>
+</html>
