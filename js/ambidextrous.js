@@ -14,10 +14,15 @@ var AppRouter = Backbone.Router.extend({
         'Research': 'showPublications',
         'Blog': 'linkToBlog',
         'Playground': 'linkToPlayground',
+        'Art': 'displayArt',
         'Media': 'showMedia',
         'Fitness': 'getFit',
         'Codelog': 'showCodez'
 
+    },
+
+    displayArt: function() {
+        $('#app').html('I recently got started with drawing and sketching on an iPad as well as on the Wacom Bamboo');
     },
 
     showCodez: function () {
@@ -46,7 +51,10 @@ var AppRouter = Backbone.Router.extend({
     },
 
     displayContact: function () {
-        $('#app').html('Shoot me an email at RaviSinha AT my DOT unt DOT edu or follow me on Twitter <a href="http://twitter.com/ambidextrousTx" target="_blank">@ambidextrousTx</a>');
+        $('#app').html('<p>Shoot me an email at RaviSinha AT my DOT unt DOT edu</p>' +
+            '<p>Follow me on Twitter <a href="http://twitter.com/ambidextrousTx" target="_blank">@ambidextrousTx</a></p>' +
+            '<p><a href="http://www.vimgolf.com/ambidextrousTx" target="_blank">Me</a> on VimGolf</p>' +
+            '<p>My Stack Overflow Career <a href="http://careers.stackoverflow.com/cv/employer/141359" target="_blank">profile</a></p>');
     },
 
     showProjects: function () {
