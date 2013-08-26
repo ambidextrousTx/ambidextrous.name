@@ -14,7 +14,7 @@ body {
     background-color: #efefef;
     padding: 20px 20px 20px 20px;
     text-align: center;
-    width: 900px;
+    width: 1000px;
     margin: 0 auto;
 
 }
@@ -33,7 +33,7 @@ a {
 .logo h1, .logo a {
     text-align: right;
     color: #024E68;
-    background-color: #61B4CF;
+    /*background-color: #61B4CF;*/
     text-decoration: none;
     font-family: 'Fredericka the Great', cursive;
     font-size: 48px;
@@ -42,7 +42,7 @@ a {
 }
 
 .logo p {
-    text-align: right;
+    text-align: left;
     color: #06799F;
 
     font-family: 'Amatic SC', cursive;
