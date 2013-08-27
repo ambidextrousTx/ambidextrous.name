@@ -58,11 +58,12 @@ var AppRouter = Backbone.Router.extend({
     },
 
     showProjects: function () {
-        $('#app').html('See all my repositories on my <a href="http://github.com/ambidextrousTx" target="_blank">GitHub profile</a>');
+        $('#app').html('See all my repositories on my <a href="http://github.com/ambidextrousTx" target="_blank">GitHub profile</a><br />' +
+            'See all my repositories on my <a href="https://bitbucket.org/dashboard/overview" target="_blank">BitBucket profile</a> ');
     },
 
     showPublications: function () {
-        $('#app').html('Here is a list of all my publications: COMING SOON');
+        $('#app').html('Here is a list of all my <a href="http://scholar.google.com/citations?user=7gfF6KkAAAAJ&hl=en" target="_blank">publications</a> on Google Scholar');
     },
 
     linkToBlog: function () {
