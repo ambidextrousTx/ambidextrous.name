@@ -53,8 +53,12 @@ var AppRouter = Backbone.Router.extend({
     displayContact: function () {
         $('#app').html('<p>Shoot me an email at RaviSinha AT my DOT unt DOT edu</p>' +
             '<p>Follow me on Twitter <a href="http://twitter.com/ambidextrousTx" target="_blank">@ambidextrousTx</a></p>' +
-            '<p><a href="http://www.vimgolf.com/ambidextrousTx" target="_blank">Me</a> on VimGolf</p>' +
-            '<p>My Stack Overflow Career <a href="http://careers.stackoverflow.com/cv/employer/141359" target="_blank">profile</a></p>');
+            '<p><a href="http://www.vimgolf.com/ambidextrousTx" target="_blank">Me on VimGolf</a></p>' +
+            '<p><a href="http://stackexchange.com/users/1142066/ambidextrous?tab=accounts" target="_blank">Me on StackExchange</a></p>' +
+            '<p>My Stack Overflow Career <a href="http://careers.stackoverflow.com/cv/employer/141359" target="_blank">profile</a></p>' +
+            '<p><a href="https://www.goodreads.com/user/show/9159065-ravi-sinha" target="_blank"><img src="img/GoodReads75.jpg" /></a>' +
+            '<a href="https://twitter.com/ambidextrousTx" target="_blank"><img src="img/Twitter75.jpg" /> </a></p>'
+        );
     },
 
     showProjects: function () {
