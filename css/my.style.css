@@ -94,11 +94,13 @@ a {
 
 .footer {
     margin: 0 auto;
+    border-top: double solid 1px;
+    border-bottom: double solid 1px;
 }
 
 .footer p {
     text-transform: uppercase;
-    border-bottom: solid 1px;
+    display: inline;
 }
 
 .footer li {

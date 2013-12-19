@@ -30,10 +30,10 @@ var AppRouter = Backbone.Router.extend({
     },
 
     getFit: function () {
-        $('#app').html('I have researched and learned from the best resources on the Web. It is still a work in ' +
-            'progress. I eat a high protein, high fiber, high-in-greens, low carb, low saturated fat diet. I practice ' +
+        $('#app').html('I have researched and learned from the best resources on the Web, although it is a work in ' +
+            'progress. I eat a high protein, high fiber, high-in-greens, low carb, low saturated fat diet as consistently as my schedule allows. I practice ' +
             'and experiment with traditional weight training, sprints, incline sprints, kettlebells, exercise bands, ' +
-            'and metabolic conditioning workouts. More COMING SOON')
+            'and metabolic conditioning workouts.')
     },
 
     showMedia: function () {
@@ -41,13 +41,13 @@ var AppRouter = Backbone.Router.extend({
     },
 
     displayAbout: function () {
-        $('#app').html('Continuing the brief introduction in the byline above, I like to experiment with and learn from' +
-            ' all kinds of software programming technologies and physical fitness activies. I am also learning' +
-            ' touch typing. This is my new Website built using Backbone JS and HTML5 Boilerplate. This Website or my Tweets are' +
-            ' not affiliated to any of my employers, present or past. The purpose of this Website is to showcase' +
-            ' some cool stuff I have been learning, and to learn from the process of creating and sharing. The content,' +
-            ' style and interactivity are all going to keep evolving as I learn and master new technologies. Stay tuned!'
-        );
+        $('#app').html('I like experimenting with and learning all kinds of new technology, and tidbits about physical fitness, nutrition, ' +
+            'and a multitude of other things. I can touch type, and I am a big believer in learning productivity tools. My ' +
+            'current favorites are Vim, Tmux, Zsh, iTerm2, Eclipse, IntelliJ, and Webstorm. My current favorite languages are ' +
+            'Python, Scala, Java, Clojure, SML, and Ruby. This Website is intended to be both a showcase and a playground of ' +
+            'my various interests. You can follow me along on Twitter, on my blog, and this Website. Occasionally you can ' +
+            'expect updates on fitness, nutrition, traveling, technology in general, as well as non-fiction writing (English ' +
+            'and German) from me as well. This site will keep changing as I learn and grow.');
     },
 
     displayContact: function () {
