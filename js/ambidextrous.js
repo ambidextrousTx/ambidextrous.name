@@ -22,7 +22,9 @@ var AppRouter = Backbone.Router.extend({
     },
 
     displayArt: function() {
-        $('#app').html('I recently got started with drawing and sketching on an iPad as well as on the Wacom Bamboo');
+        $('#app').html('I recently got started with drawing and sketching on an iPad as well as on the Wacom Bamboo. ' +
+            'Especially on the iPad I am experimenting with Autodesk Sketchbook Pro and FiftyThree Paper (and Pencil);. I ' +
+            'have also been attending painting classes in the city with real physical media - acrylic, easels and brushes.');
     },
 
     showCodez: function () {
@@ -30,10 +32,12 @@ var AppRouter = Backbone.Router.extend({
     },
 
     getFit: function () {
-        $('#app').html('I have researched and learned from the best resources on the Web, although it is a work in ' +
-            'progress. I eat a high protein, high fiber, high-in-greens, low carb, low saturated fat diet as consistently as my schedule allows. I practice ' +
+        $('#app').html('I have researched and learned from the best resources on the Web and literature, although it is a work in ' +
+            'progress, since it is harder to implement in practice with a full time job and other obligations. I eat a high protein, ' +
+            'high fiber, high-in-greens, low carb, low saturated fat diet as consistently as my schedule allows. I practice ' +
             'and experiment with traditional weight training, sprints, incline sprints, kettlebells, exercise bands, ' +
-            'and metabolic conditioning workouts.')
+            'and metabolic conditioning workouts. I have gotten into the practice of having my workouts preplanned so that I have' +
+            'fewer excuses to skimp on them.')
     },
 
     showMedia: function () {
@@ -41,13 +45,14 @@ var AppRouter = Backbone.Router.extend({
     },
 
     displayAbout: function () {
-        $('#app').html('I like experimenting with and learning all kinds of new technology, and tidbits about physical fitness, nutrition, ' +
+        $('#app').html('I like experimenting with and learning about all kinds of new computer software technology, and tidbits about physical ' +
+            'fitness, nutrition, ' +
             'and a multitude of other things. I can touch type, and I am a big believer in learning productivity tools. My ' +
             'current favorites are Vim, Tmux, Zsh, iTerm2, Eclipse, IntelliJ, and Webstorm. My current favorite languages are ' +
-            'Python, Scala, Java, Clojure, SML, and Ruby. This Website is intended to be both a showcase and a playground of ' +
+            'Python, Scala, Java, Clojure, SML, and Ruby. Recently I\'ve been reviving an old hobby of drawing and sketching, ' +
+            'mainly digitally, but occasionally with real physical media. This Website is intended to be both a showcase and a playground of ' +
             'my various interests. You can follow me along on Twitter, on my blog, and this Website. Occasionally you can ' +
-            'expect updates on fitness, nutrition, traveling, technology in general, as well as non-fiction writing (English ' +
-            'and German) from me as well. This site will keep changing as I learn and grow.');
+            'expect updates on the above and whatever else I am excited about at a given moment. This site will keep changing as I learn and grow.');
     },
 
     displayContact: function () {

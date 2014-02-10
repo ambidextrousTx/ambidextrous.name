@@ -106,3 +106,9 @@ a {
 .footer li {
     display: inline;
 }
+
+.rotate {
+    display: inline-block;
+    transition-duration: 0.3s;
+
+}
