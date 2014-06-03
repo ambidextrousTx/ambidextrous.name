@@ -10,3 +10,17 @@ holder.onclick = function () {
 
 }
 
+var skillsHolder = document.getElementById('skills-flash');
+var skillIndex = 0;
+
+function skillsFlash() {
+    var skills = ['Passionate software developer', 'Engineer, researcher, scientist', 'Open sourcer, fitness enthusiast, trilingual', 'Work in progress'];
+    var skillParticle = document.createElement('p');
+    var skillText = document.createTextNode(skills[skillIndex]);
+    skillParticle.appendChild(skillText);
+    skillsHolder.innerHTML = skillParticle.innerHTML;
+    skillIndex++;
+    if (skillIndex >= skills.length) skillIndex = 0;
+}
+
+setInterval(skillsFlash, 2000);
