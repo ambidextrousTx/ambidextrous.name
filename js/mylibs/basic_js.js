@@ -14,7 +14,7 @@ var skillsHolder = document.getElementById('skills-flash');
 var skillIndex = 0;
 
 function skillsFlash() {
-    var skills = ['Passionate software developer', 'Engineer, researcher, scientist', 'Open sourcer, fitness enthusiast, trilingual', 'Work in progress'];
+    var skills = ['Engineer, researcher, scientist', 'Open sourcer, fitness enthusiast, trilingual', 'Work in progress', 'Passionate software developer'];
     var skillParticle = document.createElement('p');
     var skillText = document.createTextNode(skills[skillIndex]);
     skillParticle.appendChild(skillText);
@@ -24,3 +24,11 @@ function skillsFlash() {
 }
 
 setInterval(skillsFlash, 2000);
+
+skillsHolder.onclick = function() {
+    if(skillsHolder.className == '' || skillsHolder.className == 'left')
+        skillsHolder.className = 'right';
+    else
+        skillsHolder.className = 'left';
+
+}

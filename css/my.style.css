@@ -42,7 +42,6 @@ a {
 }
 
 .logo p {
-    text-align: left;
     color: #06799F;
 
     font-family: 'Amatic SC', cursive;
@@ -111,4 +110,12 @@ a {
     display: inline-block;
     transition-duration: 0.3s;
 
+}
+
+.right {
+    text-align: right;
+}
+
+.left {
+    text-align: left;
 }
