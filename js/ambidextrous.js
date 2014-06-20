@@ -80,7 +80,13 @@ var AppRouter = Backbone.Router.extend({
     },
 
     linkToPlayground: function () {
-        $('#app').html('Here I will showcase some random experimental Web design concepts that I am currently playing with')
+        $('#app').html('Here I will showcase some random experimental Web design concepts that I am currently playing with' +
+            '<br /><br />' +
+                'Trying out some phrase elements <br />' +
+                '<dfn>Definition</dfn> <br />' +
+                '<code>Code</code> <br />' +
+                '<kbd>Keyboard</kbd>'
+        )
     }
 
 });
