@@ -32,3 +32,15 @@ skillsHolder.onclick = function() {
         skillsHolder.className = 'left';
 
 }
+
+function populateTime() {
+    var now = moment();
+    var holder = document.getElementById('moment');
+    var holderP = document.createElement('p');
+    var timeText = document.createTextNode(now);
+    holderP.appendChild(timeText);
+    holder.innerHTML = holderP.innerHTML;
+
+}
+
+populateTime();
