@@ -21,10 +21,10 @@ var AppRouter = Backbone.Router.extend({
 
     },
 
-    displayArt: function() {
+    displayArt: function () {
         $('#app').html('I recently got started with drawing and sketching on an iPad as well as on the Wacom Bamboo. ' +
-            'Especially on the iPad I am experimenting with Autodesk Sketchbook Pro and FiftyThree Paper (and Pencil);. I ' +
-            'have also been attending painting classes in the city with real physical media - acrylic, easels and brushes.');
+        'Especially on the iPad I am experimenting with Autodesk Sketchbook Pro and FiftyThree Paper (and Pencil);. I ' +
+        'have also been attending painting classes in the city with real physical media - acrylic, easels and brushes.');
     },
 
     showCodez: function () {
@@ -33,11 +33,11 @@ var AppRouter = Backbone.Router.extend({
 
     getFit: function () {
         $('#app').html('I have researched and learned from the best resources on the Web and literature, although it is a work in ' +
-            'progress, since it is harder to implement in practice with a full time job and other obligations. I eat a high protein, ' +
-            'high fiber, high-in-greens, low carb, low saturated fat diet as consistently as my schedule allows. I practice ' +
-            'and experiment with traditional weight training, sprints, incline sprints, kettlebells, exercise bands, ' +
-            'and metabolic conditioning workouts. I have gotten into the practice of having my workouts preplanned so that I have' +
-            'fewer excuses to skimp on them.')
+        'progress, since it is harder to implement in practice with a full time job and other obligations. I eat a high protein, ' +
+        'high fiber, high-in-greens, low carb, low saturated fat diet as consistently as my schedule allows. I practice ' +
+        'and experiment with traditional weight training, sprints, incline sprints, kettlebells, exercise bands, ' +
+        'and metabolic conditioning workouts. I have gotten into the practice of having my workouts preplanned so that I have' +
+        'fewer excuses to skimp on them.')
     },
 
     showMedia: function () {
@@ -45,14 +45,16 @@ var AppRouter = Backbone.Router.extend({
     },
 
     displayAbout: function () {
-        $('#app').html('I like experimenting with and learning about all kinds of new computer software technology, and tidbits about physical ' +
-            'fitness, nutrition, ' +
-            'and a multitude of other things. I can touch type, and I am a big believer in learning productivity tools. My ' +
-            'current favorites are Vim, Tmux, Zsh, iTerm2, Eclipse, IntelliJ, and Webstorm. My current favorite languages are ' +
-            'Python, Scala, Java, Clojure, SML, and Ruby. Recently I\'ve been reviving an old hobby of drawing and sketching, ' +
-            'mainly digitally, but occasionally with real physical media. This Website is intended to be both a showcase and a playground of ' +
-            'my various interests. You can follow me along on Twitter, on my blog, and this Website. Occasionally you can ' +
-            'expect updates on the above and whatever else I am excited about at a given moment. This site will keep changing as I learn and grow.');
+        $('#app').html('I like experimenting with and learning about all kinds of new computer software technology, ' +
+        'and tidbits about physical fitness, nutrition, hardware/ Internet of Things (especially Arduino), ' +
+        'and a multitude of other things. I can touch type, and I am a big believer in learning productivity tools. My ' +
+        'current favorites are Vim, Tmux, Zsh, iTerm2, Eclipse, IntelliJ, and Webstorm. I also like tracking things, and some of ' +
+        'my favorites are Omnifocus and Toggl. My current favorite programming languages are ' +
+        'Python, Scala, Java, Clojure, Go, and Ruby. Recently I\'ve been reviving an old hobby of drawing and sketching, ' +
+        'mainly digitally, but occasionally with real physical media, and have also been learning to play the keyboard. ' +
+        'This Website is intended to be both a showcase and a playground of ' +
+        'my various interests. You can follow me along on Twitter, on my blog, and this Website. Occasionally you can ' +
+        'expect updates on the above and whatever else I am excited about at a given moment. This site will keep changing as I learn and grow.');
     },
 
     displayContact: function () {
@@ -68,7 +70,7 @@ var AppRouter = Backbone.Router.extend({
 
     showProjects: function () {
         $('#app').html('See all my repositories on my <a href="http://github.com/ambidextrousTx" target="_blank">GitHub profile</a><br />' +
-            'See all my repositories on my <a href="https://bitbucket.org/dashboard/overview" target="_blank">BitBucket profile</a> ');
+        'See all my repositories on my <a href="https://bitbucket.org/dashboard/overview" target="_blank">BitBucket profile</a> ');
     },
 
     showPublications: function () {
@@ -82,10 +84,10 @@ var AppRouter = Backbone.Router.extend({
     linkToPlayground: function () {
         $('#app').html('Here I will showcase some random experimental Web design concepts that I am currently playing with' +
             '<br /><br />' +
-                'Trying out some phrase elements <br />' +
-                '<dfn>Definition</dfn> <br />' +
-                '<code>Code</code> <br />' +
-                '<kbd>Keyboard</kbd>'
+            'Trying out some phrase elements <br />' +
+            '<dfn>Definition</dfn> <br />' +
+            '<code>Code</code> <br />' +
+            '<kbd>Keyboard</kbd>'
         )
     }
 
